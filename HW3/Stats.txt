@@ -1,0 +1,3 @@
+The project took me about 10 hours in total to finish
+
+The computing time was 1 minute 26 seconds to find all bigrams

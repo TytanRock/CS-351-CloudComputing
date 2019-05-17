@@ -1,0 +1,15 @@
+These are the 10 most common words that follow "my"
+Format is as follows:
+
+Most used #				[["my" <word that follows>], % of time it follows, # of occurrences total]
+
+"Most used number 1"	[["my", "wife"], 0.05204392548209648, 2545]
+"Most used number 2"	[["my", "girlfriend"], 0.036154679863397474, 1768]
+"Most used number 3"	[["my", "friend"], 0.026441177072043517, 1293]
+"Most used number 4"	[["my", "dad"], 0.01599149301650273, 782]
+"Most used number 5"	[["my", "women"], 0.014846322161101, 726]
+"Most used number 6"	[["my", "life"], 0.012678677327662011, 620]
+"Most used number 7"	[["my", "mom"], 0.011001820003680907, 538]
+"Most used number 8"	[["my", "coffee"], 0.010920022085437926, 534]
+"Most used number 9"	[["my", "favorite"], 0.010920022085437926, 534]
+"Most used number 10"	[["my", "son"], 0.010695077810269729, 523]

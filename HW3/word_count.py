@@ -46,7 +46,7 @@ class MRWordProbability(MRJob):
         # Use regex to find words
         for word in WORD_RE.findall(line):
             if(prevWord != ""):
-                yield (prevWord + "-" + word, 1)
+                yield ((prevWord, word), 1)
             prevWord = word
     
     # Combine all like bigrams
@@ -55,22 +55,16 @@ class MRWordProbability(MRJob):
     
     # Combine all like bigrams
     def reducer_count_bigrams(self, word, counts):
-        yield None, (sum(counts), word)
-    
-    # Function used to filter for bigrams that start with "my" and rank them on how often they occur
-    def sortKey(self, x):
-        num, word = x
-        if(word.startswith("my")):
-            return num
-        else:
-            return 0
+        first_word, second_word = word
+        yield first_word, (sum(counts), second_word)
+        
     # Function used to sort based on probability
     def mostUsed(self, x):
         num, word = x
         return num
     
     # Calculate percentage of each word showing up
-    def reducer_calculate_percents(self, _, pairs):
+    def reducer_calculate_percents(self, word, pairs):
         
         total = 0
         
@@ -84,19 +78,22 @@ class MRWordProbability(MRJob):
             
             total = total + tmpCnt
         
-        # Then sort the list based on the above function
-        sortedList = sorted(sortedPairs, key=self.sortKey, reverse = True)
-        for i in range(10):
-            word_count, word_key = sortedList[i]
-            yield 'Most used number ' + str(i+1), (word_key, word_count / total, word_count)
-        
-        
         # Then print out all the rest of the words based on most common occurence
         probabilityList = sorted(secondPairs, key=self.mostUsed, reverse = True)
         for anotherPair in probabilityList:
             word_count, word_key = anotherPair
             
-            yield word_key, ((float(word_count) / total), word_count)
+            yield (word, word_key), ((float(word_count) / total), word_count)
+        
+        # If the first word is "my", print the most used pairs
+        if (word == "my"):
+            for i in range(10):
+                if i == len(probabilityList): 
+                    break
+                word_count, word_key = probabilityList[i]
+                yield 'Most used number ' + str(i+1), ((word, word_key), word_count / total, word_count)
+        
+        
 
 # Run the program
 if __name__ == '__main__':
